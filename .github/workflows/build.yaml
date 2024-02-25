@@ -34,6 +34,10 @@ jobs:
         with:
           version: "latest"
 
+      - name: Add wasm target
+        run: |
+          rustup target add wasm32-unknown-unknown
+
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-20.04'
         run: |
