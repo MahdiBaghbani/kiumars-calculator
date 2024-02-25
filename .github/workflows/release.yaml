@@ -16,6 +16,7 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it.
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -43,6 +44,11 @@ jobs:
 
       - name: Install frontend dependencies
         run: yarn install
+
+      - name: Cache cargo & target directories
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: "v2"
 
       - uses: tauri-apps/tauri-action@v0
         env:

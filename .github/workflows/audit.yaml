@@ -5,15 +5,14 @@ on:
   schedule: [ { cron: "0 0 * * *" } ]
   # (optional) Run workflow manually.
   workflow_dispatch:
-  # (optional) Run workflow when pushing on master.
   push:
     paths:
-      # Run if workflow changes
+      # Run if workflow changes:
       - ".github/workflows/audit.yaml"
-      # Run on changed dependencies
+      # Run on changed dependencies:
       - "**/Cargo.toml"
       - "**/Cargo.lock"
-      # Run if the configuration file changes
+      # Run if the configuration file changes:
       - "**/audit.toml"
   pull_request:
 
@@ -32,7 +31,7 @@ jobs:
     continue-on-error: ${{ matrix.checks == 'advisories' }}
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it.
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -47,12 +46,12 @@ jobs:
     permissions:
       issues: write
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it.
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Audit Rust Dependencies
         uses: actions-rust-lang/audit@v1
         with:
-          # Comma separated list of issues to ignore
+          # Comma separated list of issues to ignore.
           ignore: RUSTSEC-2023-0071

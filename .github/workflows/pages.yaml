@@ -1,9 +1,9 @@
 name: Pages
 
 on:
+  # (optional) Run workflow manually.
   workflow_dispatch:
   push:
-    workflow_dispatch:
     branches:
       - master
   pull_request:
@@ -12,20 +12,13 @@ on:
 
 jobs:
   build-pages:
-    permissions:
-      contents: write
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [ ubuntu-latest ]
-
-    runs-on: ${{ matrix.platform }}
+    runs-on: ubuntu-latest
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it.
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        if: matrix.platform == 'ubuntu-latest'
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
@@ -48,6 +41,11 @@ jobs:
 
       - name: Install frontend dependencies
         run: yarn install
+
+      - name: Cache cargo & target directories
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: "v2"
 
       - name: Build the Rust WASM app and all of its assets
         run: trunk build --public-url ${{ github.event.repository.name }} --release
